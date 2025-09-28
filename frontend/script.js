@@ -1,5 +1,5 @@
 // ========= Auto-config de API para despliegue =========
-// Orden de prioridad: ?api=...  ->  localStorage(API_BASE)  ->  same-origin
+// Prioridad: ?api=... -> localStorage(API_BASE) -> same-origin (si el backend sirve el front)
 const qsApi = new URLSearchParams(location.search).get('api');
 const sameOrigin = location.origin.startsWith('http') ? location.origin : null;
 const API_BASE = (qsApi || localStorage.getItem('API_BASE') || sameOrigin || '').replace(/\/+$/, '');
@@ -41,14 +41,21 @@ const seccionOrden = $('#seccionOrden');
 const seccionListado = $('#seccionListado');
 const tbody = $('#tablaOrdenes');
 const inputPlatillo = $('#platillo');
+const seccionAuth = $('#seccionAuth');
+const barraSesion = $('#barraSesion');
+const btnLogout = $('#btnLogout');
 
 // ========= UI =========
 function actualizarUI() {
   const logueado = !!clienteActivo;
-  show(seccionOrden, logueado);
-  show(seccionListado, logueado);
+
+  if (seccionAuth) show(seccionAuth, !logueado);
+  if (barraSesion) show(barraSesion, logueado);
+  if (seccionOrden) show(seccionOrden, logueado);
+  if (seccionListado) show(seccionListado, logueado);
+
   if (logueado) cargarOrdenes().catch(console.error);
-  else tbody.innerHTML = '';
+  else if (tbody) tbody.innerHTML = '';
 }
 
 // ========= Registro =========
@@ -85,6 +92,13 @@ formLogin?.addEventListener('submit', async (e) => {
   } catch (err) { toast(`Error de login: ${err.message}`); }
 });
 
+// ========= Logout =========
+btnLogout?.addEventListener('click', () => {
+  localStorage.removeItem('clienteActivo');
+  clienteActivo = null;
+  actualizarUI();
+});
+
 // ========= Crear orden =========
 formOrden?.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -112,7 +126,7 @@ function renderOrdenes(ordenes) {
   if (!ordenes || !ordenes.length) {
     tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">Sin órdenes</td></tr>`;
     return;
-  }
+    }
   for (const o of ordenes) {
     const tr = document.createElement('tr');
     tr.innerHTML = `
@@ -146,10 +160,7 @@ function badgeClass(estado) {
 
 // ========= Arranque =========
 document.addEventListener('DOMContentLoaded', async () => {
-  try {
-    await api('/health');
-  } catch {
-    toast('No se puede conectar al backend. Configura ?api=URL o revisa CORS.');
-  }
+  try { await api('/health'); }
+  catch { toast('No se puede conectar al backend. Configura ?api=URL o revisa CORS.'); }
   actualizarUI();
 });
