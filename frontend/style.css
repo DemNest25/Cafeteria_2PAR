@@ -1,0 +1,67 @@
+/* Fondo general */
+body {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Títulos principales */
+h1 {
+  font-weight: 700;
+  color: #343a40;
+}
+
+/* Tarjetas */
+.card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border: none;
+}
+
+.card-header {
+  font-weight: 600;
+  background: #495057;
+  color: #fff;
+  border-radius: 12px 12px 0 0;
+}
+
+/* Botones */
+.btn {
+  border-radius: 8px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Formularios */
+input.form-control {
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  padding: 10px;
+  font-size: 0.95rem;
+}
+
+input.form-control:focus {
+  border-color: #495057;
+  box-shadow: 0 0 5px rgba(73, 80, 87, 0.4);
+}
+
+/* Tabla */
+.table {
+  margin-top: 10px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table thead {
+  background-color: #495057;
+  color: #fff;
+}
+
+.table-striped tbody tr:nth-child(odd) {
+  background-color: #f1f3f5;
+}
